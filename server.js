@@ -1,11 +1,13 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
-
 const port = 3000;
-app.get("/ma_premiere_page", (req, res) => {
-  res.send("Hello World");
-});
+const initAllRoutes = require("./routes");
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+initAllRoutes(app);
 
 app.listen(port, () => {
-  console.log(`app started ${port}`);
+  console.log(`App started ${port}`);
 });
