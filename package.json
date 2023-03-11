@@ -15,7 +15,6 @@
     "nodemon": "^2.0.21",
     "uuid": "^9.0.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JohanCaz/Agence_de_voyage_Back.git"
