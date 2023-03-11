@@ -1,15 +1,28 @@
 {
-  "name": "agence_voyage_back",
+  "name": "agence_de_voyage_back",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "node": "^19.6.1",
+    "nodemon": "^2.0.21",
     "uuid": "^9.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohanCaz/Agence_de_voyage_Back.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JohanCaz/Agence_de_voyage_Back/issues"
+  },
+  "homepage": "https://github.com/JohanCaz/Agence_de_voyage_Back#readme",
+  "keywords": []
 }
