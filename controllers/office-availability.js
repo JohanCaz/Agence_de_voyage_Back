@@ -2,39 +2,40 @@ const { v4: uuidv4 } = require("uuid");
 const { dateIsValid } = require("../tools");
 const { officeData } = require("./office");
 
+// Enumération pour les options de répétition de disponibilité de bureau
 const repeatStatusENUM = {
   onceAWeek: "onceAWeek",
   everyDay: "everyDay",
 };
 
-// MOCKsss
-const data = [
+// Données de disponibilité de bureau mocke
+const availabilityData = [
   {
     id: "039478ea-ceff-4af4-956b-40517830dabd",
     officeId: "d4293495-7745-44c8-a451-deea99122f00",
     startDate: new Date("2023-01-01T09:30:00"),
     endDate: new Date("2023-01-01T12:30:00"),
-    slotDuration: 10, // minitue
+    slotDuration: 10, // minute
     repeatStatus: repeatStatusENUM.onceAWeek,
     repeatStatusEndDate: new Date("2023-01-31T12:30:00"),
   },
 ];
 
+// Fonction pour récupérer toutes les disponibilités de bureau
 const getAll = (req, res) => {
-  res.json(data);
+  res.json(Data);
 };
 
+// Fonction pour récupérer une disponibilité de bureau en fonction de son ID
 const get = (req, res) => {
   const { id } = req.params;
-  const office = data.find((o) => {
-    return o.id === id;
-  });
+  const office = data.find((o) => o.id === id);
 
   if (office === undefined) {
     return res.status(404).json({ error: "Record not found" });
   }
 
-  res.json(office);
+  return res.json(office);
 };
 
 // vérfier que les office availability ne se chevauchent pas !
@@ -49,6 +50,8 @@ const add = (req, res) => {
     repeatStatusEndDate,
   } = req.body;
 
+  // Vérifier si des paramètres obligatoires sont manquants
+
   if (
     officeId == null ||
     startDate == null ||
@@ -57,19 +60,22 @@ const add = (req, res) => {
   ) {
     return res.status(400).json({ error: "Missing parameter" });
   }
+  // Vérifier si l'ID du bureau est valide
 
   if (!officeData.some((o) => o.id === officeId)) {
     return res.status(400).json({ error: "Unknown office !" });
   }
 
-  const _startDate = new Date(startDate);
-  const _endDate = new Date(endDate);
+  // Convertir les dates en objets Date et vérifier leur validité
+  const startDateTime = new Date(startDate);
+  const endDateTime = new Date(endDate);
 
-  if (!dateIsValid(_startDate) || !dateIsValid(_endDate)) {
+  if (!dateIsValid(startDateTime) || !dateIsValid(endDateTime)) {
     return res.status(400).json({ error: "Invalid date" });
   }
 
-  if (_startDate.getTime() >= _endDate.getTime()) {
+  // Vérifier si la date de début est avant la date de fin
+  if (startDateTime.getTime() >= endDateTime.getTime()) {
     return res
       .status(400)
       .json({ error: "The first date should be after the end date" });
@@ -81,6 +87,8 @@ const add = (req, res) => {
     startDate,
     endDate,
     slotDuration,
+    repeatStatus,
+    repeatStatusEndDate,
   };
 
   if (repeatStatus != null && !repeatStatusENUM[repeatStatus]) {

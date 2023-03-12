@@ -11,3 +11,5 @@ initAllRoutes(app);
 app.listen(port, () => {
   console.log(`App started ${port}`);
 });
+
+module.exports = app; // Ajout de cette ligne
