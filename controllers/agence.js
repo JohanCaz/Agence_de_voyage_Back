@@ -1,6 +1,8 @@
+const { v4: uuidv4 } = require("uuid");
+
 const data = [
   {
-    id: "d4293495-7745-44c8-a451-deea99122f00",
+    id: "4cd009d9-79d8-4c6e-8200-7c5ca4a156ac",
     name: "Agence 1",
   },
   {

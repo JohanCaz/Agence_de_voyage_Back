@@ -11,8 +11,8 @@ const repeatStatusENUM = {
 // Données de disponibilité de bureau mocke
 const availabilityData = [
   {
-    id: "039478ea-ceff-4af4-956b-40517830dabd",
-    officeId: "d4293495-7745-44c8-a451-deea99122f00",
+    id: "d151f31c-2bc5-4200-83ad-54bfea88de1a",
+    officeId: '4cd009d9-79d8-4c6e-8200-7c5ca4a156ac',
     startDate: new Date("2023-01-01T09:30:00"),
     endDate: new Date("2023-01-01T12:30:00"),
     slotDuration: 10, // minute
