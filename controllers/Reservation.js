@@ -21,101 +21,82 @@ const availabilityData = [
   },
 ];
 
-// Fonction pour récupérer toutes les disponibilités de bureau
+// Méthode pour récupérer l'ensemble des cabinets
 const getAll = (req, res) => {
-  res.json(Data);
+  res.json(data);
 };
 
-// Fonction pour récupérer une disponibilité de bureau en fonction de son ID
+
+// Méthode pour afficher un cabinet 
 const get = (req, res) => {
-  const { id } = req.params;
-  const office = data.find((o) => o.id === id);
+  const { id }  = req.params;
+  const findoffice = data.find(findOff => {
+      return findOff.id === id
+  });
 
-  if (office === undefined) {
-    return res.status(404).json({ error: "Record not found" });
+  if(findoffice === undefined) {
+      return res.status(404).json({error: 'Cabinet non trouvé'});   
   }
 
-  return res.json(office);
+  res.json(findoffice);
 };
 
-// vérfier que les office availability ne se chevauchent pas !
 
+// Méthode pour ajouter un cabinet
 const add = (req, res) => {
-  const {
-    officeId,
-    startDate,
-    endDate,
-    slotDuration,
-    repeatStatus,
-    repeatStatusEndDate,
-  } = req.body;
+  const {   
+      officeId,
+      startDate,
+      endDate,
+      appointmentDuration,
+   } = req.body;
 
-  // Vérifier si des paramètres obligatoires sont manquants
 
-  if (
-    officeId == null ||
-    startDate == null ||
-    endDate == null ||
-    slotDuration == null
-  ) {
-    return res.status(400).json({ error: "Missing parameter" });
-  }
-  // Vérifier si l'ID du bureau est valide
-
-  if (!officeData.some((o) => o.id === officeId)) {
-    return res.status(400).json({ error: "Unknown office !" });
+  if (officeId == null || startDate == null || endDate == null || appointmentDuration == null) {
+      return res.status(400).json({error: 'Paramètre manquant'});
   }
 
-  // Convertir les dates en objets Date et vérifier leur validité
-  const startDateTime = new Date(startDate);
-  const endDateTime = new Date(endDate);
-
-  if (!dateIsValid(startDateTime) || !dateIsValid(endDateTime)) {
-    return res.status(400).json({ error: "Invalid date" });
+  if(!officeData.some(off => off.id === officeId)) {
+      return res.status(400).json({error: 'Cabinet inconnu'});
   }
 
-  // Vérifier si la date de début est avant la date de fin
-  if (startDateTime.getTime() >= endDateTime.getTime()) {
-    return res
-      .status(400)
-      .json({ error: "The first date should be after the end date" });
+  const _startDate  = new Date(startDate);
+  const _endDate  = new Date(endDate);
+
+  // Erreur si on rentre une date non valide
+  if (!dateIsValid(_startDate) || !dateIsValid(_endDate)) {
+      return res.status(400).json({error: 'Date non valide'});
   }
+
+
+  // Erreur si on rentre une startDate plus récente que la endDate
+  if (_startDate.getTime() >= _endDate.getTime()) {
+      return res.status(400).json({error: 'La date de départ doit être avant la date de fin !'});
+  }
+
+
 
   const office = {
-    id: uuidv4(),
-    officeId,
-    startDate,
-    endDate,
-    slotDuration,
-    repeatStatus,
-    repeatStatusEndDate,
+      id: uuidv4(),
+      officeId,
+      startDate,
+      endDate,
+      appointmentDuration,
   };
 
-  if (repeatStatus != null && !repeatStatusENUM[repeatStatus]) {
-    return res.status(400).json({ error: "Unknown repeat status" });
-  }
-
-  const _repeatStatusEndDate = new Date(repeatStatusEndDate);
-
-  if (repeatStatus != null && !dateIsValid(_repeatStatusEndDate)) {
-    return res
-      .status(400)
-      .json({ error: "The repeat status end date is required !" });
-  }
-
-  office.repeatStatus = repeatStatus;
-  office.repeatStatusEndDate = repeatStatusEndDate;
-
+  
   data.push(office);
 
   res.json(office);
 };
 
+
+// Méthode pour supprimer un cabinet
 const remove = (req, res) => {
   const { id } = req.params;
-  const officeAvailability = data.findIndex((o) => o.id == id);
+  const officeAvailability = data.findIndex(idOffice => idOffice.id == id);
   if (officeAvailability === -1) {
-    return res.status(404).json({ error: "Record not found !" });
+      return res.status(404).json({error: 'Cabinet non trouvé'});
   }
 
   data.splice(officeAvailability, 1);
@@ -123,61 +104,50 @@ const remove = (req, res) => {
   return res.status(204).send();
 };
 
+
+// Méthode pour modifier un cabinet
 const edit = (req, res) => {
   const { id } = req.params;
-  const {
-    startDate,
-    endDate,
-    slotDuration,
-    repeatStatus,
-    repeatStatusEndDate,
-  } = req.body;
+  const {   
+      startDate,
+      endDate,
+      appointmentDuration,
+      } = req.body;
 
-  const office = data.find((o) => o.id === id);
 
+  const office = data.find(o => o.id === id);
+  
   if (office === undefined) {
-    return res.status(404).json({ error: "Record not found !" });
+       return res.status(404).json({error: 'Cabinet non trouvé'});
+   }
+
+  if (
+      startDate == null || endDate == null || appointmentDuration == null) {
+      return res.status(400).json({error: 'Paramètre manquant'});
   }
+  
+  const _startDate  = new Date(startDate);
+  const _endDate  = new Date(endDate);
 
-  if (startDate == null || endDate == null || slotDuration == null) {
-    return res.status(400).json({ error: "Missing parameter" });
-  }
-
-  const _startDate = new Date(startDate);
-  const _endDate = new Date(endDate);
-
+  // Erreur si on rentre une date non valide
   if (!dateIsValid(_startDate) || !dateIsValid(_endDate)) {
-    return res.status(400).json({ error: "Invalid date" });
+      return res.status(400).json({error: 'Date non valide'});
   }
-
+  
+  // Erreur si on rentre une startDate plus récente que la endDate
   if (_startDate.getTime() >= _endDate.getTime()) {
-    return res
-      .status(400)
-      .json({ error: "The first date should be after the end date" });
+      return res.status(400).json({error: 'La date de départ doit être avant la date de fin !'});
   }
 
   office.startDate = startDate;
   office.endDate = endDate;
-  office.slotDuration = slotDuration;
-
-  if (repeatStatus != null && !repeatStatusENUM[repeatStatus]) {
-    return res.status(400).json({ error: "Unknown repeat status" });
-  }
-
-  const _repeatStatusEndDate = new Date(repeatStatusEndDate);
-
-  if (repeatStatus != null && !dateIsValid(_repeatStatusEndDate)) {
-    return res
-      .status(400)
-      .json({ error: "The repeat status end date is required !" });
-  }
-
-  office.repeatStatus = repeatStatus;
-  office.repeatStatusEndDate = repeatStatusEndDate;
+  office.appointmentDuration = appointmentDuration;
 
   return res.json(office);
 };
 
+
+// Permet d'exporter les méthodes
 module.exports = {
   getAll,
   get,
