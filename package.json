@@ -23,5 +23,6 @@
     "url": "https://github.com/JohanCaz/Agence_de_voyage_Back/issues"
   },
   "homepage": "https://github.com/JohanCaz/Agence_de_voyage_Back#readme",
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {}
 }
