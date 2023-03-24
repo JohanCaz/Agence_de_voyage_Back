@@ -1,15 +1,16 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser')
 const app = express();
-const port = 3005;
-const initAllRoutes = require("./routes");
+const port = 3000;
+const initAllRoutes = require('./routes');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 initAllRoutes(app);
 
 app.listen(port, () => {
-  console.log(`App started ${port}`);
-});
-
-module.exports = app; // Ajout de cette ligne
+  console.log(`Bienvenue ${port}`)
+})
