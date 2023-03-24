@@ -1,9 +1,9 @@
-const officeRoutes = require('./office');
-const officeAvailabilityRoutes = require('./office-availability');
+const journeyRoutes = require('./journey');
+//const journeyAvailabilityRoutes = require('./journey-availability');
 
 
 // Exporter les routes
 module.exports = function(app) {
-    app.use('/', officeRoutes);
-    app.use('/', officeAvailabilityRoutes);
+    app.use('/', journeyRoutes);
+   // app.use('/', journeyAvailabilityRoutes);
 };
