@@ -5,5 +5,5 @@ const journeyRoutes = require('./journey');
 // Exporter les routes
 module.exports = function(app) {
     app.use('/', journeyRoutes);
-   // app.use('/', journeyAvailabilityRoutes);
+   app.use('/', journeyAvailabilityRoutes);
 };
